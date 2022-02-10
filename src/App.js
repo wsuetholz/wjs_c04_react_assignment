@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import './App.css';
 import Country from './components/country';
 import Medal from "./components/medal";
+import NewCountry from "./components/newcountry";
 
 class App extends Component {
     state = {
@@ -38,6 +39,22 @@ class App extends Component {
             { id: 3, deco: 'MedalCountGold', medalType: 'gold' }
         ]
 
+    }
+
+    handleAddCountry = (countryId, name, flag) => {
+        const { countries } = this.state;
+        let id = countryId;
+        let flg = flag;
+        if (id === '')
+            id = countries.length + 1;
+        const newCountries = [...countries].concat({id: id, name: name, flag: flg, bronze: 0, gold: 0, silver: 0 });
+        this.setState({ countries: newCountries });
+    }
+
+    handleDeleteCountry = (countryId) => {
+        const { countries } = this.state;
+        const newCountries = [...countries].filter(c => c.id !== countryId);
+        this.setState({ countries: newCountries });
     }
 
     handleAdjustCount = (countryId, medalType, adjustBy) => {
@@ -88,6 +105,7 @@ class App extends Component {
                         </div>
 
                     </div>
+                    <NewCountry onAddCountry={this.handleAddCountry} />
                 </div>
             </React.Fragment>
             );
